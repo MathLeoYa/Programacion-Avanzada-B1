@@ -5,8 +5,6 @@ public class Bodeguero {
     public Bodeguero() {
     }
 
-    public Bodeguero(String local) {
-        this.local = local;
-    }
+    // aaaaa
     
 }
