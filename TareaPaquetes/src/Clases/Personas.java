@@ -48,5 +48,10 @@ public class Personas {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "Personas{" + "cedula=" + cedula + ", apellido=" + apellido + ", nombre=" + nombre + ", email=" + email + '}';
+    }
     
 }
