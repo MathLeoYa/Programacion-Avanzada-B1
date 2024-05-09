@@ -1,5 +1,5 @@
 package Clases;
-public class Bodeguero {
+public class Bodeguero extends Empleados{
     private String local;
     
     public Bodeguero() {
