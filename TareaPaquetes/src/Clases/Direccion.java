@@ -1,11 +1,15 @@
 
 package Clases;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 @Entity
 public class Direccion {
     @Id
@@ -16,7 +20,8 @@ public class Direccion {
     private String calle2;
     private String referenda;
     private boolean actual;
-
+@OneToMany(mappedBy = "direccion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ClienteDireccion> clienteDirecciones;
     @ManyToOne
     private Clientes cliente;
 
