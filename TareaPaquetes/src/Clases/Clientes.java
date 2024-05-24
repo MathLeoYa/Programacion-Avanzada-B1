@@ -1,8 +1,14 @@
 package Clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 
-public class Clientes extends Personas {
+public class Clientes extends Personas implements Serializable{
     private String celular;
     public ArrayList<Direccion> direcciones;
 

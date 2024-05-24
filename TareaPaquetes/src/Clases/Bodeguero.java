@@ -1,8 +1,15 @@
 package Clases;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+@Entity
+
 public class Bodeguero extends Empleados{
+    @Id
+    private int idBod;
     private String local;
     
-        
+    
     public Bodeguero() {
     }
 

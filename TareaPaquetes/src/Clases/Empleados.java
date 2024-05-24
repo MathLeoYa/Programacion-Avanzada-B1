@@ -1,6 +1,15 @@
 package Clases;
-public class Empleados extends Personas{
+
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+
+public class Empleados extends Personas implements Serializable{
     private String cuidad;
+    
     public Empleados() {
     }
     public Empleados(String cuidad, String cedula, String apellido, String nombre, String email) {

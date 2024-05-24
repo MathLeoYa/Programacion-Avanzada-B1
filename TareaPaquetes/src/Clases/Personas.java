@@ -1,8 +1,19 @@
 
 package Clases;
 
-public class Personas {
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+
+public abstract class Personas implements Serializable{
+    @Id
     String cedula;
+    @Basic
     String apellido;
     String nombre;
     String email;
