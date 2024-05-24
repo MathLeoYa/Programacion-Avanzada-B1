@@ -1,21 +1,44 @@
 
 package Clases;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+@Entity
 public class Direccion {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String codigo;
     private String calle1;
     private String calle2;
-    private String referencia;
-    private int actual;
+    private String referenda;
+    private boolean actual;
+
+    @ManyToOne
+    private Clientes cliente;
 
     public Direccion() {
     }
 
-    public Direccion(String codigo, String calle1, String calle2, String referencia, int actual) {
+    public Direccion(int id, String codigo, String calle1, String calle2, String referenda, boolean actual, Clientes cliente) {
+        this.id = id;
         this.codigo = codigo;
         this.calle1 = calle1;
         this.calle2 = calle2;
-        this.referencia = referencia;
+        this.referenda = referenda;
         this.actual = actual;
+        this.cliente = cliente;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCodigo() {
@@ -42,25 +65,28 @@ public class Direccion {
         this.calle2 = calle2;
     }
 
-    public String getReferencia() {
-        return referencia;
+    public String getReferenda() {
+        return referenda;
     }
 
-    public void setReferencia(String referencia) {
-        this.referencia = referencia;
+    public void setReferenda(String referenda) {
+        this.referenda = referenda;
     }
 
-    public int getActual() {
+    public boolean isActual() {
         return actual;
     }
 
-    public void setActual(int actual) {
+    public void setActual(boolean actual) {
         this.actual = actual;
     }
 
-    @Override
-    public String toString() {
-        return "Direccion{" + "codigo=" + codigo + ", calle1=" + calle1 + ", calle2=" + calle2 + ", referencia=" + referencia + ", actual=" + actual + '}';
+    public Clientes getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Clientes cliente) {
+        this.cliente = cliente;
     }
     
 }

@@ -12,11 +12,11 @@ import javax.persistence.InheritanceType;
 
 public abstract class Personas implements Serializable{
     @Id
-    String cedula;
+    private String cedula;
     @Basic
-    String apellido;
-    String nombre;
-    String email;
+    private String apellido;
+    private String nombre;
+    private String email;
 
     public Personas() {
     }

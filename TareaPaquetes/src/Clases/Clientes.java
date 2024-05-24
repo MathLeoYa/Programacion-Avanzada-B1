@@ -2,71 +2,55 @@ package Clases;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-
 public class Clientes extends Personas implements Serializable{
-    private String celular;
-    public ArrayList<Direccion> direcciones;
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Direccion> direcciones;
 
-    public Clientes() {
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Entrega> entregas;
+    
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Paquete> paquetes;
+    
+    public void hacerActual(Direccion direccion) {
+        for (Direccion dir : direcciones) {
+            dir.setActual(false);
+        }
+        direccion.setActual(true);
     }
 
-    public Clientes(String celular, ArrayList<Direccion> direcciones, String cedula, String apellido, String nombre, String email) {
-        super(cedula, apellido, nombre, email);
-        this.celular = celular;
-        this.direcciones = direcciones;
-    }
-
-    public String getCelular() {
-        return celular;
-    }
-
-    public void setCelular(String celular) {
-        this.celular = celular;
-    }
-
-    public ArrayList<Direccion> getDirecciones() {
+    public List<Direccion> getDirecciones() {
         return direcciones;
     }
 
-    public void setDirecciones(ArrayList<Direccion> direcciones) {
+    public void setDirecciones(List<Direccion> direcciones) {
         this.direcciones = direcciones;
     }
 
-    public String getCedula() {
-        return cedula;
+    public List<Entrega> getEntregas() {
+        return entregas;
     }
 
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
+    public void setEntregas(List<Entrega> entregas) {
+        this.entregas = entregas;
     }
 
-    public String getApellido() {
-        return apellido;
+    public List<Paquete> getPaquetes() {
+        return paquetes;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPaquetes(List<Paquete> paquetes) {
+        this.paquetes = paquetes;
     }
     
 }

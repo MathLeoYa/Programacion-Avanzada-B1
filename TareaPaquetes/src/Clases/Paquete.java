@@ -1,17 +1,54 @@
 package Clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
-public class Paquete {
-    int idPaq;
+@Entity
+public class Paquete implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idPaq;
     String codigo;
     String descripcion;
     Double peso;
     Double largo;
     Double ancho;
-    ArrayList<Estado> estado;
+        
+    @OneToMany(mappedBy = "paquete", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Estado> estados;
+
+    @OneToOne
+    private Entrega entrega;
+    @ManyToOne
+    private Clientes cliente;
+
+    public Paquete() {
+    }
+
+    public Paquete(int idPaq, String codigo, String descripcion, Double peso, Double largo, Double ancho, List<Estado> estados, Entrega entrega, Clientes cliente) {
+        this.idPaq = idPaq;
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.peso = peso;
+        this.largo = largo;
+        this.ancho = ancho;
+        this.estados = estados;
+        this.entrega = entrega;
+        this.cliente = cliente;
+    }
     
+/*
     public Paquete() {
         Date date = new Date();
         this.estado = new ArrayList<>();
@@ -24,17 +61,7 @@ public class Paquete {
         estado.add(esta3);
         estado.add(esta4);
     }
-
-    public Paquete(int idPaq, String codigo, String descripcion, Double peso, Double largo, Double ancho,
-            ArrayList<Estado> estado) {
-        this.idPaq = idPaq;
-        this.codigo = codigo;
-        this.descripcion = descripcion;
-        this.peso = peso;
-        this.largo = largo;
-        this.ancho = ancho;
-        this.estado = estado;
-    }
+*/
 
     public int getIdPaq() {
         return idPaq;
@@ -84,17 +111,28 @@ public class Paquete {
         this.ancho = ancho;
     }
 
-    public ArrayList<Estado> getEstado() {
-        return estado;
+    public List<Estado> getEstados() {
+        return estados;
     }
 
-    public void setEstado(ArrayList<Estado> estado) {
-        this.estado = estado;
+    public void setEstados(List<Estado> estados) {
+        this.estados = estados;
     }
 
-    @Override
-    public String toString() {
-        return "Paquete{" + "idPaq=" + idPaq + ", codigo=" + codigo + ", descripcion=" + descripcion + ", peso=" + peso + ", largo=" + largo + ", ancho=" + ancho + ", estado=" + estado + '}';
+    public Entrega getEntrega() {
+        return entrega;
+    }
+
+    public void setEntrega(Entrega entrega) {
+        this.entrega = entrega;
+    }
+
+    public Clientes getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Clientes cliente) {
+        this.cliente = cliente;
     }
     
     
