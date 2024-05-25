@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -29,7 +30,9 @@ public class PaqueteJpaController implements Serializable {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-
+    public PaqueteJpaController() {
+        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
+    }
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

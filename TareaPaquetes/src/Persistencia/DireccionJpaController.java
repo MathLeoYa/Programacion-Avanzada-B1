@@ -15,6 +15,7 @@ import Persistencia.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -26,7 +27,9 @@ public class DireccionJpaController implements Serializable {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-
+    public DireccionJpaController() {
+        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
+        }
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

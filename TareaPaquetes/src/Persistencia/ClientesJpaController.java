@@ -19,6 +19,7 @@ import Persistencia.exceptions.NonexistentEntityException;
 import Persistencia.exceptions.PreexistingEntityException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -30,7 +31,11 @@ public class ClientesJpaController implements Serializable {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-
+    
+    public ClientesJpaController() {
+        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
+    }
+    
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
