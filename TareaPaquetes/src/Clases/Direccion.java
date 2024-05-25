@@ -1,6 +1,7 @@
 
 package Clases;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 @Entity
-public class Direccion {
+public class Direccion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,8 +21,7 @@ public class Direccion {
     private String calle2;
     private String referenda;
     private boolean actual;
-@OneToMany(mappedBy = "direccion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ClienteDireccion> clienteDirecciones;
+
     @ManyToOne
     private Clientes cliente;
 

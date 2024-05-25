@@ -13,8 +13,7 @@ import javax.persistence.OneToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Clientes extends Personas implements Serializable{
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ClienteDireccion> clienteDirecciones;
+   
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Direccion> direcciones;
 

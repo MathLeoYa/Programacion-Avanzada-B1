@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Persistence;
+package Persistencia;
 
-import Clases.Bodeguero;
-import Persistence.exceptions.NonexistentEntityException;
-import Persistence.exceptions.PreexistingEntityException;
+import Clases.Empleados;
+import Persistencia.exceptions.NonexistentEntityException;
+import Persistencia.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -20,9 +20,9 @@ import javax.persistence.criteria.Root;
  *
  * @author Mateo
  */
-public class BodegueroJpaController implements Serializable {
+public class EmpleadosJpaController implements Serializable {
 
-    public BodegueroJpaController(EntityManagerFactory emf) {
+    public EmpleadosJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -31,16 +31,16 @@ public class BodegueroJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Bodeguero bodeguero) throws PreexistingEntityException, Exception {
+    public void create(Empleados empleados) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(bodeguero);
+            em.persist(empleados);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findBodeguero(bodeguero.getCedula()) != null) {
-                throw new PreexistingEntityException("Bodeguero " + bodeguero + " already exists.", ex);
+            if (findEmpleados(empleados.getCedula()) != null) {
+                throw new PreexistingEntityException("Empleados " + empleados + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -50,19 +50,19 @@ public class BodegueroJpaController implements Serializable {
         }
     }
 
-    public void edit(Bodeguero bodeguero) throws NonexistentEntityException, Exception {
+    public void edit(Empleados empleados) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            bodeguero = em.merge(bodeguero);
+            empleados = em.merge(empleados);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = bodeguero.getCedula();
-                if (findBodeguero(id) == null) {
-                    throw new NonexistentEntityException("The bodeguero with id " + id + " no longer exists.");
+                String id = empleados.getCedula();
+                if (findEmpleados(id) == null) {
+                    throw new NonexistentEntityException("The empleados with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -78,14 +78,14 @@ public class BodegueroJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Bodeguero bodeguero;
+            Empleados empleados;
             try {
-                bodeguero = em.getReference(Bodeguero.class, id);
-                bodeguero.getCedula();
+                empleados = em.getReference(Empleados.class, id);
+                empleados.getCedula();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The bodeguero with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The empleados with id " + id + " no longer exists.", enfe);
             }
-            em.remove(bodeguero);
+            em.remove(empleados);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -94,19 +94,19 @@ public class BodegueroJpaController implements Serializable {
         }
     }
 
-    public List<Bodeguero> findBodegueroEntities() {
-        return findBodegueroEntities(true, -1, -1);
+    public List<Empleados> findEmpleadosEntities() {
+        return findEmpleadosEntities(true, -1, -1);
     }
 
-    public List<Bodeguero> findBodegueroEntities(int maxResults, int firstResult) {
-        return findBodegueroEntities(false, maxResults, firstResult);
+    public List<Empleados> findEmpleadosEntities(int maxResults, int firstResult) {
+        return findEmpleadosEntities(false, maxResults, firstResult);
     }
 
-    private List<Bodeguero> findBodegueroEntities(boolean all, int maxResults, int firstResult) {
+    private List<Empleados> findEmpleadosEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Bodeguero.class));
+            cq.select(cq.from(Empleados.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -118,20 +118,20 @@ public class BodegueroJpaController implements Serializable {
         }
     }
 
-    public Bodeguero findBodeguero(String id) {
+    public Empleados findEmpleados(String id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Bodeguero.class, id);
+            return em.find(Empleados.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getBodegueroCount() {
+    public int getEmpleadosCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Bodeguero> rt = cq.from(Bodeguero.class);
+            Root<Empleados> rt = cq.from(Empleados.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
