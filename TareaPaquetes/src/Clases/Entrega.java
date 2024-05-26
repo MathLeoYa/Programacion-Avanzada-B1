@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
 
 @Entity
 public class Entrega implements Serializable  {
@@ -16,6 +17,7 @@ public class Entrega implements Serializable  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String codigo;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fecha;
     private String observacion;
 
@@ -31,6 +33,15 @@ public class Entrega implements Serializable  {
     public Entrega() {
     }
 
+    public Entrega(int id, String codigo, Date fecha, String observacion, Repartidor repartidor, Paquete paquete) {
+        this.id = id;
+        this.codigo = codigo;
+        this.fecha = fecha;
+        this.observacion = observacion;
+        this.repartidor = repartidor;
+        this.paquete = paquete;
+    }
+
     public Entrega(int id, String codigo, Date fecha, String observacion, Clientes cliente, Repartidor repartidor, Paquete paquete) {
         this.id = id;
         this.codigo = codigo;
@@ -40,6 +51,7 @@ public class Entrega implements Serializable  {
         this.repartidor = repartidor;
         this.paquete = paquete;
     }
+    
 
     public int getId() {
         return id;
@@ -72,15 +84,7 @@ public class Entrega implements Serializable  {
     public void setObservacion(String observacion) {
         this.observacion = observacion;
     }
-
-    public Clientes getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Clientes cliente) {
-        this.cliente = cliente;
-    }
-
+    
     public Repartidor getRepartidor() {
         return repartidor;
     }
@@ -96,5 +100,17 @@ public class Entrega implements Serializable  {
     public void setPaquete(Paquete paquete) {
         this.paquete = paquete;
     }
-    
+
+    public Clientes getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Clientes cliente) {
+        this.cliente = cliente;
+    }
+
+    @Override
+    public String toString() {
+        return "Entrega{" + "id=" + id + ", codigo=" + codigo + ", fecha=" + fecha + ", observacion=" + observacion + ", cliente=" + cliente + ", repartidor=" + repartidor + ", paquete=" + paquete + '}';
+    }
 }

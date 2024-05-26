@@ -19,17 +19,17 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author Mateo
+ * @author V I C T U S
  */
 public class EmpleadosJpaController implements Serializable {
-
+    public EmpleadosJpaController() {
+        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
+    }
     public EmpleadosJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-    public EmpleadosJpaController() {
-        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
-        }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

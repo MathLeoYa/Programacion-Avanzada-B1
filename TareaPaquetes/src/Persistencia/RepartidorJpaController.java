@@ -4,42 +4,62 @@
  */
 package Persistencia;
 
+import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import Clases.Entrega;
 import Clases.Repartidor;
 import Persistencia.exceptions.NonexistentEntityException;
 import Persistencia.exceptions.PreexistingEntityException;
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
- * @author Mateo
+ * @author V I C T U S
  */
 public class RepartidorJpaController implements Serializable {
-
+    public RepartidorJpaController() {
+        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
+    }
     public RepartidorJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-    public RepartidorJpaController() {
-        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
-    }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
     public void create(Repartidor repartidor) throws PreexistingEntityException, Exception {
+        if (repartidor.getEntregas() == null) {
+            repartidor.setEntregas(new ArrayList<Entrega>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            List<Entrega> attachedEntregas = new ArrayList<Entrega>();
+            for (Entrega entregasEntregaToAttach : repartidor.getEntregas()) {
+                entregasEntregaToAttach = em.getReference(entregasEntregaToAttach.getClass(), entregasEntregaToAttach.getId());
+                attachedEntregas.add(entregasEntregaToAttach);
+            }
+            repartidor.setEntregas(attachedEntregas);
             em.persist(repartidor);
+            for (Entrega entregasEntrega : repartidor.getEntregas()) {
+                Repartidor oldRepartidorOfEntregasEntrega = entregasEntrega.getRepartidor();
+                entregasEntrega.setRepartidor(repartidor);
+                entregasEntrega = em.merge(entregasEntrega);
+                if (oldRepartidorOfEntregasEntrega != null) {
+                    oldRepartidorOfEntregasEntrega.getEntregas().remove(entregasEntrega);
+                    oldRepartidorOfEntregasEntrega = em.merge(oldRepartidorOfEntregasEntrega);
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findRepartidor(repartidor.getCedula()) != null) {
@@ -58,7 +78,34 @@ public class RepartidorJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Repartidor persistentRepartidor = em.find(Repartidor.class, repartidor.getCedula());
+            List<Entrega> entregasOld = persistentRepartidor.getEntregas();
+            List<Entrega> entregasNew = repartidor.getEntregas();
+            List<Entrega> attachedEntregasNew = new ArrayList<Entrega>();
+            for (Entrega entregasNewEntregaToAttach : entregasNew) {
+                entregasNewEntregaToAttach = em.getReference(entregasNewEntregaToAttach.getClass(), entregasNewEntregaToAttach.getId());
+                attachedEntregasNew.add(entregasNewEntregaToAttach);
+            }
+            entregasNew = attachedEntregasNew;
+            repartidor.setEntregas(entregasNew);
             repartidor = em.merge(repartidor);
+            for (Entrega entregasOldEntrega : entregasOld) {
+                if (!entregasNew.contains(entregasOldEntrega)) {
+                    entregasOldEntrega.setRepartidor(null);
+                    entregasOldEntrega = em.merge(entregasOldEntrega);
+                }
+            }
+            for (Entrega entregasNewEntrega : entregasNew) {
+                if (!entregasOld.contains(entregasNewEntrega)) {
+                    Repartidor oldRepartidorOfEntregasNewEntrega = entregasNewEntrega.getRepartidor();
+                    entregasNewEntrega.setRepartidor(repartidor);
+                    entregasNewEntrega = em.merge(entregasNewEntrega);
+                    if (oldRepartidorOfEntregasNewEntrega != null && !oldRepartidorOfEntregasNewEntrega.equals(repartidor)) {
+                        oldRepartidorOfEntregasNewEntrega.getEntregas().remove(entregasNewEntrega);
+                        oldRepartidorOfEntregasNewEntrega = em.merge(oldRepartidorOfEntregasNewEntrega);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -87,6 +134,11 @@ public class RepartidorJpaController implements Serializable {
                 repartidor.getCedula();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The repartidor with id " + id + " no longer exists.", enfe);
+            }
+            List<Entrega> entregas = repartidor.getEntregas();
+            for (Entrega entregasEntrega : entregas) {
+                entregasEntrega.setRepartidor(null);
+                entregasEntrega = em.merge(entregasEntrega);
             }
             em.remove(repartidor);
             em.getTransaction().commit();

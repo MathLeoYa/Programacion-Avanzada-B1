@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 @Entity
 public class Estado implements Serializable{
     @Id
@@ -13,6 +14,7 @@ public class Estado implements Serializable{
     private int id;
     private int tipo;
     private String estado;
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fecha;
     private String observacion;
 
@@ -78,5 +80,9 @@ public class Estado implements Serializable{
     public void setPaquete(Paquete paquete) {
         this.paquete = paquete;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Estado{" + "id=" + id + ", tipo=" + tipo + ", estado=" + estado + ", fecha=" + fecha + ", observacion=" + observacion + ", paquete=" + paquete + '}';
+    }
 }

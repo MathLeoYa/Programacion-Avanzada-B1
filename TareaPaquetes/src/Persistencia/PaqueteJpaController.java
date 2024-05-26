@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Clases.Entrega;
 import Clases.Clientes;
+import Clases.Bodeguero;
 import Clases.Estado;
 import Clases.Paquete;
 import Persistencia.exceptions.NonexistentEntityException;
@@ -22,17 +23,17 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author Mateo
+ * @author V I C T U S
  */
 public class PaqueteJpaController implements Serializable {
-
+    public PaqueteJpaController() {
+        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
+    }
     public PaqueteJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-    public PaqueteJpaController() {
-        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
-    }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
@@ -55,6 +56,11 @@ public class PaqueteJpaController implements Serializable {
                 cliente = em.getReference(cliente.getClass(), cliente.getCedula());
                 paquete.setCliente(cliente);
             }
+            Bodeguero bodegueros = paquete.getBodegueros();
+            if (bodegueros != null) {
+                bodegueros = em.getReference(bodegueros.getClass(), bodegueros.getCedula());
+                paquete.setBodegueros(bodegueros);
+            }
             List<Estado> attachedEstados = new ArrayList<Estado>();
             for (Estado estadosEstadoToAttach : paquete.getEstados()) {
                 estadosEstadoToAttach = em.getReference(estadosEstadoToAttach.getClass(), estadosEstadoToAttach.getId());
@@ -74,6 +80,10 @@ public class PaqueteJpaController implements Serializable {
             if (cliente != null) {
                 cliente.getPaquetes().add(paquete);
                 cliente = em.merge(cliente);
+            }
+            if (bodegueros != null) {
+                bodegueros.getPaquetes().add(paquete);
+                bodegueros = em.merge(bodegueros);
             }
             for (Estado estadosEstado : paquete.getEstados()) {
                 Paquete oldPaqueteOfEstadosEstado = estadosEstado.getPaquete();
@@ -102,6 +112,8 @@ public class PaqueteJpaController implements Serializable {
             Entrega entregaNew = paquete.getEntrega();
             Clientes clienteOld = persistentPaquete.getCliente();
             Clientes clienteNew = paquete.getCliente();
+            Bodeguero bodeguerosOld = persistentPaquete.getBodegueros();
+            Bodeguero bodeguerosNew = paquete.getBodegueros();
             List<Estado> estadosOld = persistentPaquete.getEstados();
             List<Estado> estadosNew = paquete.getEstados();
             if (entregaNew != null) {
@@ -111,6 +123,10 @@ public class PaqueteJpaController implements Serializable {
             if (clienteNew != null) {
                 clienteNew = em.getReference(clienteNew.getClass(), clienteNew.getCedula());
                 paquete.setCliente(clienteNew);
+            }
+            if (bodeguerosNew != null) {
+                bodeguerosNew = em.getReference(bodeguerosNew.getClass(), bodeguerosNew.getCedula());
+                paquete.setBodegueros(bodeguerosNew);
             }
             List<Estado> attachedEstadosNew = new ArrayList<Estado>();
             for (Estado estadosNewEstadoToAttach : estadosNew) {
@@ -140,6 +156,14 @@ public class PaqueteJpaController implements Serializable {
             if (clienteNew != null && !clienteNew.equals(clienteOld)) {
                 clienteNew.getPaquetes().add(paquete);
                 clienteNew = em.merge(clienteNew);
+            }
+            if (bodeguerosOld != null && !bodeguerosOld.equals(bodeguerosNew)) {
+                bodeguerosOld.getPaquetes().remove(paquete);
+                bodeguerosOld = em.merge(bodeguerosOld);
+            }
+            if (bodeguerosNew != null && !bodeguerosNew.equals(bodeguerosOld)) {
+                bodeguerosNew.getPaquetes().add(paquete);
+                bodeguerosNew = em.merge(bodeguerosNew);
             }
             for (Estado estadosOldEstado : estadosOld) {
                 if (!estadosNew.contains(estadosOldEstado)) {
@@ -196,6 +220,11 @@ public class PaqueteJpaController implements Serializable {
             if (cliente != null) {
                 cliente.getPaquetes().remove(paquete);
                 cliente = em.merge(cliente);
+            }
+            Bodeguero bodegueros = paquete.getBodegueros();
+            if (bodegueros != null) {
+                bodegueros.getPaquetes().remove(paquete);
+                bodegueros = em.merge(bodegueros);
             }
             List<Estado> estados = paquete.getEstados();
             for (Estado estadosEstado : estados) {

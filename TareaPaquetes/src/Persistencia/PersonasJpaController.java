@@ -19,17 +19,17 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author Mateo
+ * @author V I C T U S
  */
 public class PersonasJpaController implements Serializable {
-
+    public PersonasJpaController() {
+        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
+    }
     public PersonasJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-    public PersonasJpaController() {
-        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
-    }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

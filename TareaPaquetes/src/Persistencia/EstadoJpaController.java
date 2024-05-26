@@ -19,17 +19,17 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author Mateo
+ * @author V I C T U S
  */
 public class EstadoJpaController implements Serializable {
-
+    public EstadoJpaController() {
+        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
+    }
     public EstadoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-    public EstadoJpaController() {
-        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
-        }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

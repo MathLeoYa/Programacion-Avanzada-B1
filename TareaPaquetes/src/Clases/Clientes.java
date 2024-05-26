@@ -1,7 +1,6 @@
 package Clases;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,7 +12,7 @@ import javax.persistence.OneToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Clientes extends Personas implements Serializable{
-   
+    private String celular;
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Direccion> direcciones;
 
@@ -30,6 +29,38 @@ public class Clientes extends Personas implements Serializable{
         direccion.setActual(true);
     }
 
+    public Clientes() {
+    }
+
+    public Clientes(String celular, List<Direccion> direcciones, String cedula, String apellido, String nombre, String email) {
+        super(cedula, apellido, nombre, email);
+        this.celular = celular;
+        this.direcciones = direcciones;
+    }
+
+    public Clientes(String celular, List<Direccion> direcciones, List<Paquete> paquetes, String cedula, String apellido, String nombre, String email) {
+        super(cedula, apellido, nombre, email);
+        this.celular = celular;
+        this.direcciones = direcciones;
+        this.paquetes = paquetes;
+    }
+
+    public Clientes(String celular, List<Direccion> direcciones, List<Entrega> entregas, List<Paquete> paquetes, String cedula, String apellido, String nombre, String email) {
+        super(cedula, apellido, nombre, email);
+        this.celular = celular;
+        this.direcciones = direcciones;
+        this.entregas = entregas;
+        this.paquetes = paquetes;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+  
     public List<Direccion> getDirecciones() {
         return direcciones;
     }
@@ -52,6 +83,11 @@ public class Clientes extends Personas implements Serializable{
 
     public void setPaquetes(List<Paquete> paquetes) {
         this.paquetes = paquetes;
+    }
+
+    @Override
+    public String toString() {
+        return "Clientes{" + "direcciones=" + direcciones + ", entregas=" + entregas + ", paquetes=" + paquetes + '}';
     }
     
 }

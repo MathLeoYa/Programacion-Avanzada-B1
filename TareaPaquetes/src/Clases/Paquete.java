@@ -32,11 +32,24 @@ public class Paquete implements Serializable {
     private Entrega entrega;
     @ManyToOne
     private Clientes cliente;
+    @ManyToOne
+    private Bodeguero bodegueros;
 
     public Paquete() {
     }
 
-    public Paquete(int idPaq, String codigo, String descripcion, Double peso, Double largo, Double ancho, List<Estado> estados, Entrega entrega, Clientes cliente) {
+    public Paquete(int idPaq, String codigo, String descripcion, Double peso, Double largo, Double ancho, List<Estado> estados, Bodeguero bodegueros) {
+        this.idPaq = idPaq;
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.peso = peso;
+        this.largo = largo;
+        this.ancho = ancho;
+        this.estados = estados;
+        this.bodegueros = bodegueros;
+    }
+    
+    public Paquete(int idPaq, String codigo, String descripcion, Double peso, Double largo, Double ancho, List<Estado> estados, Entrega entrega, Clientes cliente, Bodeguero bodegueros) {
         this.idPaq = idPaq;
         this.codigo = codigo;
         this.descripcion = descripcion;
@@ -46,6 +59,7 @@ public class Paquete implements Serializable {
         this.estados = estados;
         this.entrega = entrega;
         this.cliente = cliente;
+        this.bodegueros = bodegueros;
     }
     
 /*
@@ -134,6 +148,17 @@ public class Paquete implements Serializable {
     public void setCliente(Clientes cliente) {
         this.cliente = cliente;
     }
-    
-    
+
+    public Bodeguero getBodegueros() {
+        return bodegueros;
+    }
+
+    public void setBodegueros(Bodeguero bodegueros) {
+        this.bodegueros = bodegueros;
+    }
+
+    @Override
+    public String toString() {
+        return "Paquete{" + "idPaq=" + idPaq + ", codigo=" + codigo + ", descripcion=" + descripcion + ", peso=" + peso + ", largo=" + largo + ", ancho=" + ancho + ", estados=" + estados + ", entrega=" + entrega + ", cliente=" + cliente + ", bodegueros=" + bodegueros + '}';
+    }
 }

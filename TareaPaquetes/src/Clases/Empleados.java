@@ -29,5 +29,10 @@ public class Empleados extends Personas implements Serializable{
     public void setCuidad(String cuidad) {
         this.cuidad = cuidad;
     }
+
+    @Override
+    public String toString() {
+        return "Empleados{" + "cuidad=" + cuidad + '}';
+    }
     
 }
