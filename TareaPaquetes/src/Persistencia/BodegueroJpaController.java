@@ -19,15 +19,12 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author V I C T U S
+ * @author USER
  */
 public class BodegueroJpaController implements Serializable {
 
-    public BodegueroJpaController() {
-        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
-    }
-    public BodegueroJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+     public BodegueroJpaController() {
+        emf = Persistence.createEntityManagerFactory("sistemaPU");
     }
     private EntityManagerFactory emf = null;
 

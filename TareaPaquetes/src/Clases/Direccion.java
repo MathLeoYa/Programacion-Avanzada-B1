@@ -1,19 +1,21 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Clases;
-
+/**
+ *
+ * @author Usuario iTC
+ */
 import java.io.Serializable;
+import javax.persistence.*;
 
-import javax.persistence.Entity;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 @Entity
 public class Direccion implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+    
     private String codigo;
     private String calle1;
     private String calle2;
@@ -21,12 +23,12 @@ public class Direccion implements Serializable {
     private boolean actual;
 
     @ManyToOne
-    private Clientes cliente;
+    private Cliente cliente;
 
     public Direccion() {
     }
 
-    public Direccion(int id, String codigo, String calle1, String calle2, String referenda, boolean actual, Clientes cliente) {
+    public Direccion(Long id, String codigo, String calle1, String calle2, String referenda, boolean actual, Cliente cliente) {
         this.id = id;
         this.codigo = codigo;
         this.calle1 = calle1;
@@ -36,11 +38,11 @@ public class Direccion implements Serializable {
         this.cliente = cliente;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -84,16 +86,17 @@ public class Direccion implements Serializable {
         this.actual = actual;
     }
 
-    public Clientes getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(Clientes cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
     @Override
     public String toString() {
         return "Direccion{" + "id=" + id + ", codigo=" + codigo + ", calle1=" + calle1 + ", calle2=" + calle2 + ", referenda=" + referenda + ", actual=" + actual + ", cliente=" + cliente + '}';
-    } 
+    }
 }
+

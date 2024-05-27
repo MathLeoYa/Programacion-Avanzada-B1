@@ -21,14 +21,12 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author V I C T U S
+ * @author USER
  */
 public class RepartidorJpaController implements Serializable {
+
     public RepartidorJpaController() {
-        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
-    }
-    public RepartidorJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+         emf = Persistence.createEntityManagerFactory("sistemaPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -37,27 +35,27 @@ public class RepartidorJpaController implements Serializable {
     }
 
     public void create(Repartidor repartidor) throws PreexistingEntityException, Exception {
-        if (repartidor.getEntregas() == null) {
-            repartidor.setEntregas(new ArrayList<Entrega>());
+        if (repartidor.getEntrega() == null) {
+            repartidor.setEntrega(new ArrayList<Entrega>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Entrega> attachedEntregas = new ArrayList<Entrega>();
-            for (Entrega entregasEntregaToAttach : repartidor.getEntregas()) {
-                entregasEntregaToAttach = em.getReference(entregasEntregaToAttach.getClass(), entregasEntregaToAttach.getId());
-                attachedEntregas.add(entregasEntregaToAttach);
+            List<Entrega> attachedEntrega = new ArrayList<Entrega>();
+            for (Entrega entregaEntregaToAttach : repartidor.getEntrega()) {
+                entregaEntregaToAttach = em.getReference(entregaEntregaToAttach.getClass(), entregaEntregaToAttach.getId());
+                attachedEntrega.add(entregaEntregaToAttach);
             }
-            repartidor.setEntregas(attachedEntregas);
+            repartidor.setEntrega(attachedEntrega);
             em.persist(repartidor);
-            for (Entrega entregasEntrega : repartidor.getEntregas()) {
-                Repartidor oldRepartidorOfEntregasEntrega = entregasEntrega.getRepartidor();
-                entregasEntrega.setRepartidor(repartidor);
-                entregasEntrega = em.merge(entregasEntrega);
-                if (oldRepartidorOfEntregasEntrega != null) {
-                    oldRepartidorOfEntregasEntrega.getEntregas().remove(entregasEntrega);
-                    oldRepartidorOfEntregasEntrega = em.merge(oldRepartidorOfEntregasEntrega);
+            for (Entrega entregaEntrega : repartidor.getEntrega()) {
+                Repartidor oldRepartidorOfEntregaEntrega = entregaEntrega.getRepartidor();
+                entregaEntrega.setRepartidor(repartidor);
+                entregaEntrega = em.merge(entregaEntrega);
+                if (oldRepartidorOfEntregaEntrega != null) {
+                    oldRepartidorOfEntregaEntrega.getEntrega().remove(entregaEntrega);
+                    oldRepartidorOfEntregaEntrega = em.merge(oldRepartidorOfEntregaEntrega);
                 }
             }
             em.getTransaction().commit();
@@ -79,30 +77,30 @@ public class RepartidorJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Repartidor persistentRepartidor = em.find(Repartidor.class, repartidor.getCedula());
-            List<Entrega> entregasOld = persistentRepartidor.getEntregas();
-            List<Entrega> entregasNew = repartidor.getEntregas();
-            List<Entrega> attachedEntregasNew = new ArrayList<Entrega>();
-            for (Entrega entregasNewEntregaToAttach : entregasNew) {
-                entregasNewEntregaToAttach = em.getReference(entregasNewEntregaToAttach.getClass(), entregasNewEntregaToAttach.getId());
-                attachedEntregasNew.add(entregasNewEntregaToAttach);
+            List<Entrega> entregaOld = persistentRepartidor.getEntrega();
+            List<Entrega> entregaNew = repartidor.getEntrega();
+            List<Entrega> attachedEntregaNew = new ArrayList<Entrega>();
+            for (Entrega entregaNewEntregaToAttach : entregaNew) {
+                entregaNewEntregaToAttach = em.getReference(entregaNewEntregaToAttach.getClass(), entregaNewEntregaToAttach.getId());
+                attachedEntregaNew.add(entregaNewEntregaToAttach);
             }
-            entregasNew = attachedEntregasNew;
-            repartidor.setEntregas(entregasNew);
+            entregaNew = attachedEntregaNew;
+            repartidor.setEntrega(entregaNew);
             repartidor = em.merge(repartidor);
-            for (Entrega entregasOldEntrega : entregasOld) {
-                if (!entregasNew.contains(entregasOldEntrega)) {
-                    entregasOldEntrega.setRepartidor(null);
-                    entregasOldEntrega = em.merge(entregasOldEntrega);
+            for (Entrega entregaOldEntrega : entregaOld) {
+                if (!entregaNew.contains(entregaOldEntrega)) {
+                    entregaOldEntrega.setRepartidor(null);
+                    entregaOldEntrega = em.merge(entregaOldEntrega);
                 }
             }
-            for (Entrega entregasNewEntrega : entregasNew) {
-                if (!entregasOld.contains(entregasNewEntrega)) {
-                    Repartidor oldRepartidorOfEntregasNewEntrega = entregasNewEntrega.getRepartidor();
-                    entregasNewEntrega.setRepartidor(repartidor);
-                    entregasNewEntrega = em.merge(entregasNewEntrega);
-                    if (oldRepartidorOfEntregasNewEntrega != null && !oldRepartidorOfEntregasNewEntrega.equals(repartidor)) {
-                        oldRepartidorOfEntregasNewEntrega.getEntregas().remove(entregasNewEntrega);
-                        oldRepartidorOfEntregasNewEntrega = em.merge(oldRepartidorOfEntregasNewEntrega);
+            for (Entrega entregaNewEntrega : entregaNew) {
+                if (!entregaOld.contains(entregaNewEntrega)) {
+                    Repartidor oldRepartidorOfEntregaNewEntrega = entregaNewEntrega.getRepartidor();
+                    entregaNewEntrega.setRepartidor(repartidor);
+                    entregaNewEntrega = em.merge(entregaNewEntrega);
+                    if (oldRepartidorOfEntregaNewEntrega != null && !oldRepartidorOfEntregaNewEntrega.equals(repartidor)) {
+                        oldRepartidorOfEntregaNewEntrega.getEntrega().remove(entregaNewEntrega);
+                        oldRepartidorOfEntregaNewEntrega = em.merge(oldRepartidorOfEntregaNewEntrega);
                     }
                 }
             }
@@ -135,10 +133,10 @@ public class RepartidorJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The repartidor with id " + id + " no longer exists.", enfe);
             }
-            List<Entrega> entregas = repartidor.getEntregas();
-            for (Entrega entregasEntrega : entregas) {
-                entregasEntrega.setRepartidor(null);
-                entregasEntrega = em.merge(entregasEntrega);
+            List<Entrega> entrega = repartidor.getEntrega();
+            for (Entrega entregaEntrega : entrega) {
+                entregaEntrega.setRepartidor(null);
+                entregaEntrega = em.merge(entregaEntrega);
             }
             em.remove(repartidor);
             em.getTransaction().commit();

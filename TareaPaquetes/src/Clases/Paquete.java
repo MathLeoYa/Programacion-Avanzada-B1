@@ -1,88 +1,55 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Clases;
-
+/**
+ *
+ * @author Usuario iTC
+ */
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
+import javax.persistence.*;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Paquete implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idPaq;
-    String codigo;
-    String descripcion;
-    Double peso;
-    Double largo;
-    Double ancho;
-        
+    private int idpaq;
+    private String codigo;
+    private String descripcion;
+    private int peso;
+    private int alto;
+
     @OneToMany(mappedBy = "paquete", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Estado> estados;
 
-    @OneToOne
+    @OneToOne(mappedBy = "paquete", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Entrega entrega;
+    
     @ManyToOne
-    private Clientes cliente;
-    @ManyToOne
-    private Bodeguero bodegueros;
+    private Cliente cliente;
 
     public Paquete() {
     }
 
-    public Paquete(int idPaq, String codigo, String descripcion, Double peso, Double largo, Double ancho, List<Estado> estados, Bodeguero bodegueros) {
-        this.idPaq = idPaq;
+    public Paquete(int idpaq, String codigo, String descripcion, int peso, int alto, List<Estado> estados, Entrega entrega, Cliente cliente) {
+        this.idpaq = idpaq;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.peso = peso;
-        this.largo = largo;
-        this.ancho = ancho;
-        this.estados = estados;
-        this.bodegueros = bodegueros;
-    }
-    
-    public Paquete(int idPaq, String codigo, String descripcion, Double peso, Double largo, Double ancho, List<Estado> estados, Entrega entrega, Clientes cliente, Bodeguero bodegueros) {
-        this.idPaq = idPaq;
-        this.codigo = codigo;
-        this.descripcion = descripcion;
-        this.peso = peso;
-        this.largo = largo;
-        this.ancho = ancho;
+        this.alto = alto;
         this.estados = estados;
         this.entrega = entrega;
         this.cliente = cliente;
-        this.bodegueros = bodegueros;
-    }
-    
-/*
-    public Paquete() {
-        Date date = new Date();
-        this.estado = new ArrayList<>();
-        Estado esta1 = new Estado(0,"Creado", date, "");
-        Estado esta2 = new Estado(1,"Despachado", null, "");
-        Estado esta3 = new Estado(2,"Entregado", null, "");
-        Estado esta4 = new Estado(3,"Pendiente", null, "");
-        estado.add(esta1);
-        estado.add(esta2);
-        estado.add(esta3);
-        estado.add(esta4);
-    }
-*/
-
-    public int getIdPaq() {
-        return idPaq;
     }
 
-    public void setIdPaq(int idPaq) {
-        this.idPaq = idPaq;
+    public int getIdpaq() {
+        return idpaq;
+    }
+
+    public void setIdpaq(int idpaq) {
+        this.idpaq = idpaq;
     }
 
     public String getCodigo() {
@@ -101,28 +68,20 @@ public class Paquete implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Double getPeso() {
+    public int getPeso() {
         return peso;
     }
 
-    public void setPeso(Double peso) {
+    public void setPeso(int peso) {
         this.peso = peso;
     }
 
-    public Double getLargo() {
-        return largo;
+    public int getAlto() {
+        return alto;
     }
 
-    public void setLargo(Double largo) {
-        this.largo = largo;
-    }
-
-    public Double getAncho() {
-        return ancho;
-    }
-
-    public void setAncho(Double ancho) {
-        this.ancho = ancho;
+    public void setAlto(int alto) {
+        this.alto = alto;
     }
 
     public List<Estado> getEstados() {
@@ -141,24 +100,17 @@ public class Paquete implements Serializable {
         this.entrega = entrega;
     }
 
-    public Clientes getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(Clientes cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-    }
-
-    public Bodeguero getBodegueros() {
-        return bodegueros;
-    }
-
-    public void setBodegueros(Bodeguero bodegueros) {
-        this.bodegueros = bodegueros;
     }
 
     @Override
     public String toString() {
-        return "Paquete{" + "idPaq=" + idPaq + ", codigo=" + codigo + ", descripcion=" + descripcion + ", peso=" + peso + ", largo=" + largo + ", ancho=" + ancho + ", estados=" + estados + ", entrega=" + entrega + ", cliente=" + cliente + ", bodegueros=" + bodegueros + '}';
+        return "Paquete{" + "idpaq=" + idpaq + ", codigo=" + codigo + ", descripcion=" + descripcion + ", peso=" + peso + ", alto=" + alto + ", estados=" + estados + ", entrega=" + entrega + ", cliente=" + cliente + '}';
     }
 }
+

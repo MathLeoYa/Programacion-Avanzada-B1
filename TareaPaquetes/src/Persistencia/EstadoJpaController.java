@@ -19,14 +19,12 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author V I C T U S
+ * @author USER
  */
 public class EstadoJpaController implements Serializable {
+
     public EstadoJpaController() {
-        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
-    }
-    public EstadoJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+         emf = Persistence.createEntityManagerFactory("sistemaPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -41,7 +39,7 @@ public class EstadoJpaController implements Serializable {
             em.getTransaction().begin();
             Paquete paquete = estado.getPaquete();
             if (paquete != null) {
-                paquete = em.getReference(paquete.getClass(), paquete.getIdPaq());
+                paquete = em.getReference(paquete.getClass(), paquete.getIdpaq());
                 estado.setPaquete(paquete);
             }
             em.persist(estado);
@@ -66,7 +64,7 @@ public class EstadoJpaController implements Serializable {
             Paquete paqueteOld = persistentEstado.getPaquete();
             Paquete paqueteNew = estado.getPaquete();
             if (paqueteNew != null) {
-                paqueteNew = em.getReference(paqueteNew.getClass(), paqueteNew.getIdPaq());
+                paqueteNew = em.getReference(paqueteNew.getClass(), paqueteNew.getIdpaq());
                 estado.setPaquete(paqueteNew);
             }
             estado = em.merge(estado);
@@ -82,7 +80,7 @@ public class EstadoJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                int id = estado.getId();
+                Long id = estado.getId();
                 if (findEstado(id) == null) {
                     throw new NonexistentEntityException("The estado with id " + id + " no longer exists.");
                 }
@@ -95,7 +93,7 @@ public class EstadoJpaController implements Serializable {
         }
     }
 
-    public void destroy(int id) throws NonexistentEntityException {
+    public void destroy(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -145,7 +143,7 @@ public class EstadoJpaController implements Serializable {
         }
     }
 
-    public Estado findEstado(int id) {
+    public Estado findEstado(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Estado.class, id);

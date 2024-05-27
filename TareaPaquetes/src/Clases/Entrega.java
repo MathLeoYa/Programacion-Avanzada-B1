@@ -1,39 +1,38 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Clases;
-
+/**
+ *
+ * @author Usuario iTC
+ */
 import java.io.Serializable;
-import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
+import javax.persistence.*;
 
 @Entity
-public class Entrega implements Serializable  {
-
+public class Entrega implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+    
     private String codigo;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fecha;
+    private String fecha;
     private String observacion;
 
     @ManyToOne
-    private Clientes cliente;
+    private Cliente cliente;
 
     @ManyToOne
     private Repartidor repartidor;
 
-    @OneToOne(mappedBy = "entrega")
+    @OneToOne
     private Paquete paquete;
 
     public Entrega() {
     }
 
-    public Entrega(int id, String codigo, Date fecha, String observacion, Repartidor repartidor, Paquete paquete) {
+    public Entrega(Long id, String codigo, String fecha, String observacion, Repartidor repartidor, Paquete paquete) {
         this.id = id;
         this.codigo = codigo;
         this.fecha = fecha;
@@ -42,71 +41,60 @@ public class Entrega implements Serializable  {
         this.paquete = paquete;
     }
 
-    public Entrega(int id, String codigo, Date fecha, String observacion, Clientes cliente, Repartidor repartidor, Paquete paquete) {
-        this.id = id;
-        this.codigo = codigo;
-        this.fecha = fecha;
-        this.observacion = observacion;
-        this.cliente = cliente;
-        this.repartidor = repartidor;
-        this.paquete = paquete;
-    }
-    
-
-    public int getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
     }
 
     public String getObservacion() {
         return observacion;
     }
 
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-    
-    public Repartidor getRepartidor() {
-        return repartidor;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setRepartidor(Repartidor repartidor) {
-        this.repartidor = repartidor;
+    public Repartidor getRepartidor() {
+        return repartidor;
     }
 
     public Paquete getPaquete() {
         return paquete;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public void setRepartidor(Repartidor repartidor) {
+        this.repartidor = repartidor;
+    }
+
     public void setPaquete(Paquete paquete) {
         this.paquete = paquete;
-    }
-
-    public Clientes getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Clientes cliente) {
-        this.cliente = cliente;
     }
 
     @Override
@@ -114,3 +102,4 @@ public class Entrega implements Serializable  {
         return "Entrega{" + "id=" + id + ", codigo=" + codigo + ", fecha=" + fecha + ", observacion=" + observacion + ", cliente=" + cliente + ", repartidor=" + repartidor + ", paquete=" + paquete + '}';
     }
 }
+

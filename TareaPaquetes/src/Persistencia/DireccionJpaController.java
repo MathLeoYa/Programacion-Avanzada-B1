@@ -9,7 +9,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import Clases.Clientes;
+import Clases.Cliente;
 import Clases.Direccion;
 import Persistencia.exceptions.NonexistentEntityException;
 import java.util.List;
@@ -19,14 +19,12 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author V I C T U S
+ * @author USER
  */
 public class DireccionJpaController implements Serializable {
+
     public DireccionJpaController() {
-        emf = Persistence.createEntityManagerFactory("TareaPaquetesPU");
-    }
-    public DireccionJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+        emf = Persistence.createEntityManagerFactory("sistemaPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -39,7 +37,7 @@ public class DireccionJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Clientes cliente = direccion.getCliente();
+            Cliente cliente = direccion.getCliente();
             if (cliente != null) {
                 cliente = em.getReference(cliente.getClass(), cliente.getCedula());
                 direccion.setCliente(cliente);
@@ -63,8 +61,8 @@ public class DireccionJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Direccion persistentDireccion = em.find(Direccion.class, direccion.getId());
-            Clientes clienteOld = persistentDireccion.getCliente();
-            Clientes clienteNew = direccion.getCliente();
+            Cliente clienteOld = persistentDireccion.getCliente();
+            Cliente clienteNew = direccion.getCliente();
             if (clienteNew != null) {
                 clienteNew = em.getReference(clienteNew.getClass(), clienteNew.getCedula());
                 direccion.setCliente(clienteNew);
@@ -82,7 +80,7 @@ public class DireccionJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                int id = direccion.getId();
+                Long id = direccion.getId();
                 if (findDireccion(id) == null) {
                     throw new NonexistentEntityException("The direccion with id " + id + " no longer exists.");
                 }
@@ -95,7 +93,7 @@ public class DireccionJpaController implements Serializable {
         }
     }
 
-    public void destroy(int id) throws NonexistentEntityException {
+    public void destroy(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -107,7 +105,7 @@ public class DireccionJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The direccion with id " + id + " no longer exists.", enfe);
             }
-            Clientes cliente = direccion.getCliente();
+            Cliente cliente = direccion.getCliente();
             if (cliente != null) {
                 cliente.getDirecciones().remove(direccion);
                 cliente = em.merge(cliente);
@@ -145,7 +143,7 @@ public class DireccionJpaController implements Serializable {
         }
     }
 
-    public Direccion findDireccion(int id) {
+    public Direccion findDireccion(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Direccion.class, id);
